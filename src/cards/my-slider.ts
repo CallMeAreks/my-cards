@@ -466,7 +466,12 @@ export class MySliderV2 extends LitElement {
                 this.max = this._config!.max ? this._config!.max : this.entity.attributes.max
                 tmpVal = parseFloat(this.entity.attributes.temperature)
 
-                this.setSliderValues(tmpVal, tmpVal)
+                if (!this.showMin) { // Subtracting savedMin to make slider 0 be far left
+                    this.max = this.max - this.min
+                    tmpVal = tmpVal - this.min
+                }
+
+                this.setSliderValues(tmpVal, roundPercentage(percentage(tmpVal, this.max)))
 
                 break
             default:
