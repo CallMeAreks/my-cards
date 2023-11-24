@@ -466,7 +466,7 @@ export class MySliderV2 extends LitElement {
                 this.max = this._config!.max ? this._config!.max : this.entity.attributes.max
                 tmpVal = parseFloat(this.entity.attributes.temperature)
 
-                this.setSliderValues(tmpVal, tmpVal))
+                this.setSliderValues(tmpVal, tmpVal)
 
                 break
             default:
