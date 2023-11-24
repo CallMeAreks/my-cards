@@ -103,7 +103,8 @@ export class MySliderV2 extends LitElement {
             'cover',
             'fan',
             'switch',
-            'lock'
+            'lock',
+            'climate'
         ]
 
         if (!config.entity) {
@@ -459,6 +460,15 @@ export class MySliderV2 extends LitElement {
                 this.setSliderValues(tmpVal,tmpVal)
 
                 break
+            case 'climate': /* ------------ CLIMATE ------------ */
+                this.step = this._config!.step ? this._config!.step : this.entity.attributes.step
+                this.min = this._config!.min ? this._config!.min : this.entity.attributes.min
+                this.max = this._config!.max ? this._config!.max : this.entity.attributes.max
+                tmpVal = parseFloat(this.entity.attributes.temperature)
+
+                this.setSliderValues(tmpVal, tmpVal))
+
+                break
             default:
                 console.log('No Entity type initiated... (' + this._config!.entity.split('.')[0] + ')')
                 break
@@ -554,6 +564,9 @@ export class MySliderV2 extends LitElement {
                 break
             case 'switch':
                 this._setSwitch(this.entity, val)
+                break
+            case 'climate':
+                this._setTemperature(this.entity, val)
                 break
             default:
                 console.log('Default')
@@ -697,6 +710,14 @@ export class MySliderV2 extends LitElement {
         setTimeout(() => { // Remove transition when done
             progressEl!.style.transition = 'initial'
         }, 200)
+	}
+
+	private _setTemperature(entity, value): void {
+		this.hass.callService("climate", "set_temperature", {
+			entity_id: entity.entity_id,
+			temperature: value,
+            hvac_mode: 'cool'
+		})
 	}
 
     private createAndCleanupEventListeners(func): void {
